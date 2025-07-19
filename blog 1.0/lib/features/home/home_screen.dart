@@ -1,18 +1,22 @@
+import 'dart:io';
+
 import 'package:blog/core/theme/app_palette.dart';
 import 'package:blog/core/theme/theme.dart';
 import 'package:blog/features/people/view/screen/people_screen.dart';
 import 'package:blog/features/profile/view/screen/change_profile_screen.dart';
 import 'package:blog/features/profile/view/screen/profile_screen.dart';
+import 'package:blog/features/profile/viewmodel/profile_viewmodel.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  ConsumerState<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends ConsumerState<HomeScreen> {
   final List<Widget> screens = [PeopleScreen(), ProfileScreen()];
   int screenIndex = 0;
 
@@ -31,7 +35,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   onPressed: () => Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => ChangeProfileScreen(),
+                      builder: (context) => ChangeProfileScreen(
+                        pickImage: () =>
+                            ref.watch(profileViewmodel.notifier).pickImage(),
+                        changeProfileData: ({String? text, String? name, File? image}) => ref.watch(profileViewmodel.notifier).changeProfileData(image: image, name: name, text: text),
+                      ),
                     ),
                   ),
                   icon: Icon(Icons.edit, size: 28),
