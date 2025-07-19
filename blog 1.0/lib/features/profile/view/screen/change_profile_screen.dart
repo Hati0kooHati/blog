@@ -8,7 +8,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ChangeProfileScreen extends ConsumerStatefulWidget {
-  const ChangeProfileScreen({super.key});
+  final Future<File?> Function() pickImage;
+  final void Function({String? text, String? name, File? image}) changeProfileData;
+
+  const ChangeProfileScreen({super.key, required this.pickImage, required this.changeProfileData});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() {
@@ -19,7 +22,8 @@ class ChangeProfileScreen extends ConsumerStatefulWidget {
 class _ChangeProfileScreenState extends ConsumerState<ChangeProfileScreen> {
   late final TextEditingController _nameController;
   late final TextEditingController _descriptionController;
-  File? pickedImage;
+
+  late File? pickedImage = ref.watch(profileViewmodel.notifier).pickedImage;
 
   @override
   void initState() {
@@ -27,6 +31,13 @@ class _ChangeProfileScreenState extends ConsumerState<ChangeProfileScreen> {
     _descriptionController = TextEditingController();
 
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _descriptionController.dispose();
+    super.dispose();
   }
 
   @override
@@ -38,13 +49,13 @@ class _ChangeProfileScreenState extends ConsumerState<ChangeProfileScreen> {
           actions: [
             IconButton(
               onPressed: () {
-                ref
-                    .watch(profileViewmodel.notifier)
-                    .changeProfileData(
-                      image: pickedImage,
+              
+                
+                widget.changeProfileData(image: pickedImage,
                       name: _nameController.text,
-                      text: _descriptionController.text,
-                    );
+                      text: _descriptionController.text,);
+
+                ref.watch(profileViewmodel.notifier).pickedImage = null;
                 Navigator.pop(context);
               },
               icon: Icon(Icons.save),
@@ -72,10 +83,13 @@ class _ChangeProfileScreenState extends ConsumerState<ChangeProfileScreen> {
                             right: 17,
                             child: IconButton(
                               onPressed: () async {
-                                pickedImage = await ref
+                                ref
                                     .watch(profileViewmodel.notifier)
+                                    .pickedImage = await widget
                                     .pickImage();
-                                setState(() {});
+                              
+                              
+                               
                               },
                               icon: Icon(Icons.edit),
                             ),
