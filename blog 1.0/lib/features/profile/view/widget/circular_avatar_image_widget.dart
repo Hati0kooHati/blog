@@ -11,14 +11,10 @@ class CircularAvatarImageWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return imagePath != ""
-        ? GestureDetector(
-            child: Container(
-              height: 200,
-              width: 200,
-              clipBehavior: Clip.hardEdge,
-              decoration: AppTheme.imageFrameDecoration,
-              child: Image.file(File(imagePath!)),
-            ),
+        ? CircleAvatar(
+            backgroundImage: FileImage(File(imagePath!)),
+            maxRadius: 100,
+            minRadius: 100,
           )
         : Container(
             height: 200,
