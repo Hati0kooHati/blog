@@ -36,9 +36,7 @@ class ChangeFrameWidget extends StatelessWidget {
                     child: TextFormField(
                       controller: textEditingController,
                       textAlignVertical: TextAlignVertical.top,
-                      // keyboardType: TextInputType.multiline,
-                      // maxLines: null,
-                      // minLines: 1,
+                      
                     ),
                   )
                 : TextFormField(
