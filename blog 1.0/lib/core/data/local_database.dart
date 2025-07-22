@@ -20,8 +20,21 @@ class LocalDatabase {
         await db.execute(
           "CREATE TABLE profile_table(id TEXT PRIMARY KEY, name TEXT, text TEXT, image_file TEXT)",
         );
+
         await db.execute(
-          "CREATE TABLE people_table(id TEXT PRIMARY KEY, name TEXT, text TEXT, image_file TEXT)",
+          "CREATE TABLE people_friends_table(id TEXT PRIMARY KEY, name TEXT, text TEXT, image_file TEXT)",
+        );
+
+        await db.execute(
+          "CREATE TABLE people_enemies_table(id TEXT PRIMARY KEY, name TEXT, text TEXT, image_file TEXT)",
+        );
+
+        await db.execute(
+          "CREATE TABLE people_acquaintances_table(id TEXT PRIMARY KEY, name TEXT, text TEXT, image_file TEXT)",
+        );
+
+        await db.execute(
+          "CREATE TABLE people_others_table(id TEXT PRIMARY KEY, name TEXT, text TEXT, image_file TEXT)",
         );
 
         await db.insert("profile_table", {
