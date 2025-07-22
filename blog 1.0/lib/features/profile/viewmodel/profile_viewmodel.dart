@@ -1,13 +1,13 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:blog/core/model/human_model.dart';
 import 'package:blog/core/service/image_service.dart';
 import 'package:blog/core/utils/utils.dart';
-import 'package:blog/features/profile/model/profile_model.dart';
 import 'package:blog/features/profile/repository/local_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class ProfileViewmodel extends AsyncNotifier<ProfileModel> {
+class ProfileViewmodel extends AsyncNotifier<HumanModel> {
   final LocalRepository _localRepository;
   final ImageService _imageService;
 
@@ -16,10 +16,10 @@ class ProfileViewmodel extends AsyncNotifier<ProfileModel> {
   ProfileViewmodel(this._localRepository, this._imageService);
 
   @override
-  FutureOr<ProfileModel> build() async {
+  FutureOr<HumanModel> build() async {
     final data = await _localRepository.profileData;
 
-    return mapToProfileModel(data[0]);
+    return mapToHumanModel(data[0]);
   }
 
   void changeProfileData({String? text, String? name, File? image}) async {
@@ -40,7 +40,7 @@ class ProfileViewmodel extends AsyncNotifier<ProfileModel> {
 
     await _localRepository.changeProfileData(newProfileData: newProfileData);
 
-    state = AsyncData(mapToProfileModel(newProfileData));
+    state = AsyncData(mapToHumanModel(newProfileData));
   }
 
   Future<File?> pickImage() async {
@@ -51,5 +51,3 @@ class ProfileViewmodel extends AsyncNotifier<ProfileModel> {
 final profileViewmodel = AsyncNotifierProvider(
   () => ProfileViewmodel(LocalRepository(), ImageService()),
 );
-
-final pickedImageProvider = StateProvider<File?>((ref) => null);
